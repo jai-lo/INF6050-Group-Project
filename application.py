@@ -11,6 +11,7 @@
 @Required Modules: [required modules]
     
 @Description: [code description]
+- Combine get date function and validate date function 
 """
 ########################### 
 # IMPORT MODULES
@@ -23,6 +24,9 @@
 # GLOBAL VARIABLES
 ###########################
 
+#global variable of start date and end date
+
+
 
 ########################### 
 # USER-DEFINED FUNCTIONS
@@ -34,3 +38,17 @@
 ###########################
 
 #welcomeMessage()
+welcomeMessage()
+
+# Continue asking for dates until valid range is entered
+while True:
+
+    start_date, end_date = getDateRange()
+
+    if validateDateRange(start_date, end_date):
+        break
+
+    print("\nInvalid date range. Please try again.\n")
+
+print("\nDate range accepted.")
+print(f"Searching from {start_date} to {end_date}")

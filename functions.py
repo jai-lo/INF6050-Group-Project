@@ -20,8 +20,7 @@ from datetime import datetime
 ########################### 
 # GLOBAL VARIABLES
 ###########################
-
-apiKey = "PMDQ9G2dHAgOeblEDAJs8cD2z4l9XyMtcMKTIjLm"
+valid_ids = []
 #Storing API Key and URL as global variables
 API_KEY = "PMDQ9G2dHAgOeblEDAJs8cD2z4l9XyMtcMKTIjLm"
 BASE_URL = "https://api.nasa.gov/neo/rest/v1/feed"
@@ -42,41 +41,42 @@ def welcomeMessage():
           + "\n\tinformation regarding the asteroids approach time,"
           + "\n\tand if the asteroid has the potential to become"
           + "\n\thazardous.")
-# Prompt the user to enter the start and end date
-# Dates should be entered in the YYYY-MM-DD format required by the NASA API.
+
+# Prompt the user to enter the start and end date in format YYYY-MM-DD
 # Return both dates as a tuple for date validation and API retrieval.
-def getDateRange():
-    start_date = input("Enter the start date (YYYY-MM-DD): ")
-    end_date = input("Enter the end date (YYYY-MM-DD): ")
-    return start_date, end_date
+# Validate:
+#   -Ensure the dates are in the correct format,
+#   -The end date is not before the start date, and
+#   -The date range does not exceed 7 days.
+# Bool: Returns True if the date range is valid; otherwise, returns False.
 
-# Validate the user-entered start and end dates.
-# Parameters Used: start_date, end_date 
-# Ensure the dates are in the correct format,
-# th end date is not before the start date, and
-# the date range does not exceed 7 days.
-# Returns True if the date range is valid; otherwise, returns False.
-def validateDateRange(start_date, end_date):
-    try:
-        # Convert strings to datetime objects
-        start = datetime.strptime(start_date, "%Y-%m-%d")
-        end = datetime.strptime(end_date, "%Y-%m-%d")
+def getValidDateRange():
 
-        # Check that the end date is not before the start date
-        if end < start:
-            print("Error: The end date must be after the start date.")
-            return False
+    while True:
+        # Prompt user for date range
+        start_date = input("Enter the start date (YYYY-MM-DD): ")
+        end_date = input("Enter the end date (YYYY-MM-DD): ")
 
-        # NASA Feed API allows a maximum range of 7 days
-        if (end - start).days > 7:
-            print("Error: The date range cannot exceed 7 days.")
-            return False
+        try:
+            # Convert strings to datetime objects
+            start = datetime.strptime(start_date, "%Y-%m-%d")
+            end = datetime.strptime(end_date, "%Y-%m-%d")
 
-        return True
+            # Check that end date is after start date
+            if end < start:
+                print("Error: The end date must be after the start date.\n")
+                continue
 
-    except ValueError:
-        print("Error: Please enter dates in the format YYYY-MM-DD.")
-        return False
+            # Check NASA API maximum date range
+            if (end - start).days > 7:
+                print("Error: The date range cannot exceed 7 days.\n")
+                continue
+
+            # Return valid dates
+            return start_date, end_date
+
+        except ValueError:
+            print("Error: Please enter dates in the format YYYY-MM-DD.\n")
 
 def asteroidFeedInfo(start_date: str, end_date:str) -> None:
     #Setup query 
@@ -108,8 +108,16 @@ def asteroidFeedInfo(start_date: str, end_date:str) -> None:
                 asteroid_id = asteroid.get("id")
                 name = asteroid.get("name")
                 
-                print(f" Asteroid ID: {asteroid_id}")
-                print(f" Name: {name}")
+                #print(f" Asteroid ID: {asteroid_id}")
+                #print(f" Name: {name}\n")
+                print(f"\n{'Asteroid ID':<15} {'Name'}")
+                print("-" * 40)
+
+                for asteroid in asteroids_on_date:
+                    asteroid_id = asteroid.get("id")
+                    name = asteroid.get("name")
+
+                    print(f"{asteroid_id:<15} {name}")
                 
     #Error messages
     except requests.exceptions.HTTPError as http_err: 
@@ -121,7 +129,7 @@ def lookupAsteroid(asteroidId):
     #instantiate dictionary to store asteroid information
     data = {}
     #call API to get asteroid information
-    response = requests.get(f"https://api.nasa.gov/neo/rest/v1/neo/{asteroidId}?api_key={apiKey}")
+    response = requests.get(f"https://api.nasa.gov/neo/rest/v1/neo/{asteroidId}?api_key={API_KEY}")
     #store asteroid information in dictionary and return it
     data = response.json()
     return data
@@ -178,8 +186,43 @@ def printAsteroidSummary(asteroidId):
     print(f"\tEstimated diameter: {diameterFeetMin} - {diameterFeetMax} feet.\n")
     
     print(f"\tthis asteroid was first observed on {firstObserved} and was most recently observed on {lastObserved}")
-    
 
+def nextAction():
+#to ask what the user wants to do after ID information results
+
+    while True:
+        print("\nWhat would you like to do next?")
+        print("1 - Learn about another asteroid")
+        print("2 - Enter a new date range")
+        print("3 - Quit")
+
+        choice = input("Choice: ").strip()
+
+        if choice in("1", "2", "3"):
+            return choice
+        
+        else:
+            print('Invalid selection. Please enter 1, 2, or 3')
+
+def validateAsteroidId(asteroid_id, valid_ids):
+    #validate that inputted asteroid ID exists in the feed results#
+    return asteroid_id in valid_ids
+
+def getAsteroidID(valid_ids):
+    #asking asteroid ID input#
+
+    while True:
+        asteroid_id = input("Enter an asteroid ID for more information: ").strip()
+
+        if asteroid_id.lower() == "quit":
+            return None
+
+        if validateAsteroidId(asteroid_id, valid_ids):
+            return asteroid_id
+            
+        print("Invalid ID, please choose an asteroid ID from the list.")
+    
+'''
 # ########################### 
 # MAIN PROGRAM
 ###########################
@@ -202,9 +245,9 @@ def main():
 
 if __name__ == "__main__":
     main()
-
+'''
 #######Testing
-welcomeMessage()
+#welcomeMessage()
 asteroidFeedInfo("2015-09-07", "2015-09-08")
 #printAsteroidSummary(3542519)
 
