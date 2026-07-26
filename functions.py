@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-@Created on: [date here]
-@Author: [author name]
+@Created on: 7/26/2026
+@Author: Kevin, Nyeri, Vivian, Lexi, Jaimie
 @Course: INF 6050
 @University: Wayne State University
-@Assignment: [assignment title]
-    
+@Assignment: Group Project - Final Assignment
 @Python Version: 3.9x   
 @Required Modules: [required modules]
     
@@ -27,6 +26,19 @@ apiKey = "PMDQ9G2dHAgOeblEDAJs8cD2z4l9XyMtcMKTIjLm"
 ########################### 
 # USER-DEFINED FUNCTIONS
 ###########################
+
+def welcomeMessage():
+    print("\n\nWelcome to Near Earth Asteroid Explorer."
+          + "\n\n\t\tType quit to exit at any time..."
+          + "\n\n\tWhen you select a date range, this application will pull"
+          + "\n\tinformation on all asteroids that were or will be"
+          + "\n\tnear earth during that time."
+          + "\n\n\tThen, using the corresponding asteroidID,"
+          + "\n\tyou can find more information about the asteroids"
+          + "\n\twe listed, including appx. diameter,"
+          + "\n\tinformation regarding the asteroids approach time,"
+          + "\n\tand if the asteroid has the potential to become"
+          + "\n\thazardous.")
 
 def lookupAsteroid(asteroidId):
     #instantiate dictionary to store asteroid information
@@ -92,6 +104,7 @@ def printAsteroidSummary(asteroidId):
     
 
 #######Testing
+welcomeMessage()
 printAsteroidSummary(3542519)
 
     

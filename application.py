@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-@Created on: [date here]
-@Author: [author name]
+@Created on: 7/26/2026
+@Author: Kevin, Nyeri, Vivian, Lexi, Jaimie
 @Course: INF 6050
 @University: Wayne State University
-@Assignment: [assignment title]
+@Assignment: Group Project - Final Assignment
     
 @Python Version: 3.9x   
 @Required Modules: [required modules]
@@ -15,6 +15,8 @@
 ########################### 
 # IMPORT MODULES
 ###########################
+
+#import functions.py
 
 
 ########################### 
@@ -30,3 +32,5 @@
 ########################### 
 # RUN SCRIPT
 ###########################
+
+#welcomeMessage()
