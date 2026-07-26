@@ -78,6 +78,43 @@ def validateDateRange(start_date, end_date):
         print("Error: Please enter dates in the format YYYY-MM-DD.")
         return False
 
+def validateAsteroidId(asteroid_id, valid_ids):
+    #validate that inputted asteroid ID exists in the feed results#
+    return asteroid_id in valid_ids
+
+def getAsteroidID(valid_ids):
+    #asking asteroid ID input#
+
+    while True:
+        asteroid_id = input("Enter an asteroid ID for more information: ").strip()
+
+        if asteroid_id.lower() == "quit":
+            return None
+
+        if validateAsteroidId(asteroid_id, valid_ids):
+            return asteroid_id
+            
+        print("Invalid ID, please choose an asteroid ID from the list.")
+
+def nextAction():
+#to ask what the user wants to do after ID information results
+
+    while True:
+        print("\nWhat would you like to do next?")
+        print("1 - Learn about another asteroid")
+        print("2 - Enter a new date range")
+        print("3 - Quit")
+
+        choice = input("Choice: ").strip()
+
+        if choice in("1", "2", "3"):
+            return choice
+        
+        else:
+            print('Invalid selection. Please enter 1, 2, or 3')
+
+
+
 def asteroidFeedInfo(start_date: str, end_date:str) -> None:
     #Setup query 
     params = {"start_date": start_date, "end_date": end_date, "api_key": API_KEY}
@@ -93,6 +130,9 @@ def asteroidFeedInfo(start_date: str, end_date:str) -> None:
         data = response.json()
         near_earth_objects = data.get("near_earth_objects", {})
         
+        # create list to store valid asteroid IDs
+        valid_ids = []
+
         #Track total asteroids
         total_asteroids = data.get("element_count", 0)
         print(f"Total Asteroids Found: {total_asteroids}")
@@ -107,10 +147,16 @@ def asteroidFeedInfo(start_date: str, end_date:str) -> None:
             for asteroid in asteroids_on_date:
                 asteroid_id = asteroid.get("id")
                 name = asteroid.get("name")
+
+                #save ID for later validation
+                valid_ids.append(asteroid_id)
                 
                 print(f" Asteroid ID: {asteroid_id}")
                 print(f" Name: {name}")
                 
+        #return list of IDs
+        return valid_ids
+
     #Error messages
     except requests.exceptions.HTTPError as http_err: 
         print(f"HTTP error occurred: {http_err}")
@@ -199,6 +245,27 @@ def main():
     print("\nDate range accepted.")
     print(f"Searching from {start_date} to {end_date}")
 
+    valid_ids = asteroidFeedInfo(start_date, end_date)
+
+    while True:
+
+        asteroid_id = getAsteroidID(valid_ids)
+        
+        printAsteroidSummary(asteroid_id)
+
+        choice = nextAction()
+        
+        if choice == "1":
+            continue
+        
+        if choice == "2":
+            #returns date range prompt
+            break
+        else:
+            print("Thanks a lot for using the Asteroid Explorer! Goodbye!")
+            break
+
+       
 
 if __name__ == "__main__":
     main()
@@ -207,5 +274,3 @@ if __name__ == "__main__":
 welcomeMessage()
 asteroidFeedInfo("2015-09-07", "2015-09-08")
 #printAsteroidSummary(3542519)
-
-    
