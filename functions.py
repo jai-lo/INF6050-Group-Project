@@ -15,7 +15,7 @@
 # IMPORT MODULES
 ###########################
 import requests
-
+from datetime import datetime
 
 ########################### 
 # GLOBAL VARIABLES
@@ -42,7 +42,42 @@ def welcomeMessage():
           + "\n\tinformation regarding the asteroids approach time,"
           + "\n\tand if the asteroid has the potential to become"
           + "\n\thazardous.")
-    
+# Prompt the user to enter the start and end date
+# Dates should be entered in the YYYY-MM-DD format required by the NASA API.
+# Return both dates as a tuple for date validation and API retrieval.
+def getDateRange():
+    start_date = input("Enter the start date (YYYY-MM-DD): ")
+    end_date = input("Enter the end date (YYYY-MM-DD): ")
+    return start_date, end_date
+
+# Validate the user-entered start and end dates.
+# Parameters Used: start_date, end_date 
+# Ensure the dates are in the correct format,
+# th end date is not before the start date, and
+# the date range does not exceed 7 days.
+# Returns True if the date range is valid; otherwise, returns False.
+def validateDateRange(start_date, end_date):
+    try:
+        # Convert strings to datetime objects
+        start = datetime.strptime(start_date, "%Y-%m-%d")
+        end = datetime.strptime(end_date, "%Y-%m-%d")
+
+        # Check that the end date is not before the start date
+        if end < start:
+            print("Error: The end date must be after the start date.")
+            return False
+
+        # NASA Feed API allows a maximum range of 7 days
+        if (end - start).days > 7:
+            print("Error: The date range cannot exceed 7 days.")
+            return False
+
+        return True
+
+    except ValueError:
+        print("Error: Please enter dates in the format YYYY-MM-DD.")
+        return False
+
 def asteroidFeedInfo(start_date: str, end_date:str) -> None:
     #Setup query 
     params = {"start_date": start_date, "end_date": end_date, "api_key": API_KEY}
@@ -144,6 +179,29 @@ def printAsteroidSummary(asteroidId):
     
     print(f"\tthis asteroid was first observed on {firstObserved} and was most recently observed on {lastObserved}")
     
+
+# ########################### 
+# MAIN PROGRAM
+###########################
+def main():
+    welcomeMessage()
+
+    # Continue asking for dates until valid range is entered
+    while True:
+
+        start_date, end_date = getDateRange()
+
+        if validateDateRange(start_date, end_date):
+            break
+
+        print("\nInvalid date range. Please try again.\n")
+
+    print("\nDate range accepted.")
+    print(f"Searching from {start_date} to {end_date}")
+
+
+if __name__ == "__main__":
+    main()
 
 #######Testing
 welcomeMessage()
