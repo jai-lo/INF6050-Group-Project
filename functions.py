@@ -20,7 +20,8 @@ from datetime import datetime
 ########################### 
 # GLOBAL VARIABLES
 ###########################
-valid_ids = []
+
+#valid_ids = []
 #Storing API Key and URL as global variables
 API_KEY = "PMDQ9G2dHAgOeblEDAJs8cD2z4l9XyMtcMKTIjLm"
 BASE_URL = "https://api.nasa.gov/neo/rest/v1/feed"
@@ -78,7 +79,7 @@ def getValidDateRange():
         except ValueError:
             print("Error: Please enter dates in the format YYYY-MM-DD.\n")
 
-def asteroidFeedInfo(start_date: str, end_date:str) -> None:
+def asteroidFeedInfo(start_date: str, end_date:str, valid_ids) -> None:
     #Setup query 
     params = {"start_date": start_date, "end_date": end_date, "api_key": API_KEY}
     
@@ -92,6 +93,7 @@ def asteroidFeedInfo(start_date: str, end_date:str) -> None:
         #Parse the JSON response
         data = response.json()
         near_earth_objects = data.get("near_earth_objects", {})
+
         
         #Track total asteroids
         total_asteroids = data.get("element_count", 0)
@@ -104,26 +106,24 @@ def asteroidFeedInfo(start_date: str, end_date:str) -> None:
             
             asteroids_on_date = near_earth_objects[date]
             
+            print(f"\n{'Asteroid ID':<22} {'Name'}")
+            print("-" * 40)
+
             for asteroid in asteroids_on_date:
                 asteroid_id = asteroid.get("id")
                 name = asteroid.get("name")
                 
-                #print(f" Asteroid ID: {asteroid_id}")
-                #print(f" Name: {name}\n")
-                print(f"\n{'Asteroid ID':<15} {'Name'}")
-                print("-" * 40)
-
-                for asteroid in asteroids_on_date:
-                    asteroid_id = asteroid.get("id")
-                    name = asteroid.get("name")
-
-                    print(f"{asteroid_id:<15} {name}")
+                #save ID for later validation
+                valid_ids.append(asteroid_id)
+                
+                print(f"{asteroid_id:<22} {name}")
                 
     #Error messages
     except requests.exceptions.HTTPError as http_err: 
         print(f"HTTP error occurred: {http_err}")
     except Exception as err:
         print(f"An unexpected error occurred: {err}")
+        
 
 def lookupAsteroid(asteroidId):
     #instantiate dictionary to store asteroid information
@@ -248,7 +248,9 @@ if __name__ == "__main__":
 '''
 #######Testing
 #welcomeMessage()
-asteroidFeedInfo("2015-09-07", "2015-09-08")
+#asteroidFeedInfo("2015-09-07", "2015-09-08")
 #printAsteroidSummary(3542519)
+#start_date, end_date = getValidDateRange()
+#getAsteroidID(valid_ids)
 
     

@@ -17,7 +17,8 @@
 # IMPORT MODULES
 ###########################
 
-#import functions.py
+import functions
+valid_ids = []
 
 
 ########################### 
@@ -37,18 +38,39 @@
 # RUN SCRIPT
 ###########################
 
-#welcomeMessage()
-welcomeMessage()
+functions.welcomeMessage()
 
-# Continue asking for dates until valid range is entered
-while True:
+while True:   
+    # Continue asking for dates until valid range is entered
+    start_date, end_date = functions.getValidDateRange()
+    
+    #can this be added to the getValidDateRange function?
+    print("\nDate range accepted.")
+    print(f"Searching from {start_date} to {end_date}")
+    
+    functions.asteroidFeedInfo(start_date, end_date, valid_ids)
+    
+    while True:
 
-    start_date, end_date = getDateRange()
+        asteroidId = functions.getAsteroidID(valid_ids)
+        
+        functions.printAsteroidSummary(asteroidId)
 
-    if validateDateRange(start_date, end_date):
+        choice = functions.nextAction()
+        
+        if choice == "1":
+            continue
+        if choice == "2":
+            #returns date range prompt
+            break
+        else:
+            break
+        
+    if choice == "3":
+        print("Thanks a lot for using the Asteroid Explorer! Goodbye!")
         break
 
-    print("\nInvalid date range. Please try again.\n")
+    
 
-print("\nDate range accepted.")
-print(f"Searching from {start_date} to {end_date}")
+
+#functions.getValidDateRange
