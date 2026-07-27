@@ -52,12 +52,14 @@ def asteroidFeedInfo(start_date: str, end_date:str) -> None:
             
             asteroids_on_date = near_earth_objects[date]
             
+            print(f"\n{'Asteroid ID':<15} {'Name'}")
+            print("-" * 40)
+
             for asteroid in asteroids_on_date:
                 asteroid_id = asteroid.get("id")
                 name = asteroid.get("name")
                 
-                print(f" Asteroid ID: {asteroid_id}")
-                print(f" Name: {name}")
+                print(f"{asteroid_id:<15} {name}")
                 
     #Error messages
     except requests.exceptions.HTTPError as http_err: 
