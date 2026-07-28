@@ -8,7 +8,7 @@
 @Assignment: Group Project - Final Assignment
     
 @Python Version: 3.9x   
-@Required Modules: [required modules]
+@Required Modules: functions.py
     
 @Description: [code description]
 """
@@ -16,21 +16,54 @@
 # IMPORT MODULES
 ###########################
 
-#import functions.py
-
+import functions
 
 ########################### 
 # GLOBAL VARIABLES
 ###########################
-
-
-########################### 
-# USER-DEFINED FUNCTIONS
-###########################
+valid_ids = []
 
 
 ########################### 
 # RUN SCRIPT
 ###########################
 
-#welcomeMessage()
+functions.welcomeMessage()
+functions.newLines()
+
+while True:   
+    # Continue asking for dates until valid range is entered
+    start_date, end_date = functions.getValidDateRange()
+    
+    #can this be added to the getValidDateRange function?
+    print("\nDate range accepted.")
+    print(f"Searching from {start_date} to {end_date}")
+    
+    functions.asteroidFeedInfo(start_date, end_date, valid_ids)
+    functions.newLines()
+    
+    
+    while True:
+
+        asteroidId = functions.getAsteroidID(valid_ids)
+        
+        functions.printAsteroidSummary(asteroidId)
+
+        choice = functions.nextAction()
+        
+        if choice == "1":
+            continue
+        if choice == "2":
+            #returns date range prompt
+            break
+        else:
+            break
+        
+    if choice == "3":
+        print("Thanks a lot for using the Asteroid Explorer! Goodbye!")
+        break
+
+    
+
+
+#functions.getValidDateRange
