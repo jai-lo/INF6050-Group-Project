@@ -16,15 +16,19 @@
 ###########################
 import requests
 from datetime import datetime
+import sys
 
 ########################### 
 # GLOBAL VARIABLES
 ###########################
 
+
 apiKey = "PMDQ9G2dHAgOeblEDAJs8cD2z4l9XyMtcMKTIjLm"
 #Storing API Key and URL as global variables
 API_KEY = "PMDQ9G2dHAgOeblEDAJs8cD2z4l9XyMtcMKTIjLm"
 BASE_URL = "https://api.nasa.gov/neo/rest/v1/feed"
+
+valid_ids = []
 
 ########################### 
 # USER-DEFINED FUNCTIONS
@@ -45,9 +49,15 @@ def welcomeMessage():
 # Prompt the user to enter the start and end date
 # Dates should be entered in the YYYY-MM-DD format required by the NASA API.
 # Return both dates as a tuple for date validation and API retrieval.
+
+
+        
+        
 def getDateRange():
     start_date = input("Enter the start date (YYYY-MM-DD): ")
+    endTool(start_date)
     end_date = input("Enter the end date (YYYY-MM-DD): ")
+    endTool(end_date)
     return start_date, end_date
 
 # Validate the user-entered start and end dates.
@@ -81,15 +91,14 @@ def validateDateRange(start_date, end_date):
 def validateAsteroidId(asteroid_id, valid_ids):
     #validate that inputted asteroid ID exists in the feed results#
     return asteroid_id in valid_ids
+    print("ID validated.")
 
 def getAsteroidID(valid_ids):
     #asking asteroid ID input#
 
     while True:
         asteroid_id = input("Enter an asteroid ID for more information: ").strip()
-
-        if asteroid_id.lower() == "quit":
-            return None
+        endTool(asteroid_id)
 
         if validateAsteroidId(asteroid_id, valid_ids):
             return asteroid_id
@@ -106,13 +115,14 @@ def nextAction():
         print("3 - Quit")
 
         choice = input("Choice: ").strip()
+        endTool(choice)
 
         if choice in("1", "2", "3"):
             return choice
         
         else:
             print('Invalid selection. Please enter 1, 2, or 3')
-
+      
 
 
 def asteroidFeedInfo(start_date: str, end_date:str) -> None:
@@ -131,7 +141,7 @@ def asteroidFeedInfo(start_date: str, end_date:str) -> None:
         near_earth_objects = data.get("near_earth_objects", {})
         
         # create list to store valid asteroid IDs
-        valid_ids = []
+        
 
         #Track total asteroids
         total_asteroids = data.get("element_count", 0)
@@ -225,45 +235,65 @@ def printAsteroidSummary(asteroidId):
     
     print(f"\tthis asteroid was first observed on {firstObserved} and was most recently observed on {lastObserved}")
     
+# to establish all stage kill switch for ending the program at#
+#any point#
+def endTool (user_input):
+    ''' to follow each prompted input if user wants to end game '''
+    if user_input.lower() == 'quit':
+        print ('\nThanks for trying the Asteroid Explorer! Until next time.')
+        sys.exit() 
 
 # ########################### 
 # MAIN PROGRAM
 ###########################
 def main():
     welcomeMessage()
+    
+    
+    while True: #outer loop for date ranges
+        
+        
 
     # Continue asking for dates until valid range is entered
-    while True:
-
-        start_date, end_date = getDateRange()
-
-        if validateDateRange(start_date, end_date):
-            break
-
-        print("\nInvalid date range. Please try again.\n")
-
-    print("\nDate range accepted.")
-    print(f"Searching from {start_date} to {end_date}")
-
-    valid_ids = asteroidFeedInfo(start_date, end_date)
-
-    while True:
-
-        asteroid_id = getAsteroidID(valid_ids)
-        
-        printAsteroidSummary(asteroid_id)
-
-        choice = nextAction()
-        
-        if choice == "1":
-            continue
-        
-        if choice == "2":
-            #returns date range prompt
-            break
-        else:
-            print("Thanks a lot for using the Asteroid Explorer! Goodbye!")
-            break
+        while True:
+    
+            start_date, end_date = getDateRange()
+    
+            if validateDateRange(start_date, end_date):
+                break
+    
+            print("\nInvalid date range. Please try again.\n")
+    
+        print("\nDate range accepted.")
+        print(f"Searching from {start_date} to {end_date}")
+    
+        valid_ids = asteroidFeedInfo(start_date, end_date)
+    
+        while True:
+    
+            asteroid_id = getAsteroidID(valid_ids)
+            
+            if asteroid_id is None:
+                return
+            
+            printAsteroidSummary(asteroid_id)
+            
+            choice = nextAction()
+            
+            
+            if choice == "1":
+                #gives another asteroid
+                continue
+            
+            if choice == "2":
+                #returns date range prompt
+                break
+           
+            if choice == "3":
+                print("Thanks a lot for using the Asteroid Explorer! Goodbye!")
+                break
+                
+               
 
        
 
@@ -271,6 +301,8 @@ if __name__ == "__main__":
     main()
 
 #######Testing
-welcomeMessage()
-asteroidFeedInfo("2015-09-07", "2015-09-08")
+#welcomeMessage()
+#asteroidFeedInfo("2015-09-07", "2015-09-08")
 #printAsteroidSummary(3542519)
+
+    
