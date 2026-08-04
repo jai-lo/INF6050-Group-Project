@@ -221,36 +221,3 @@ def getAsteroidID(valid_ids):
             return asteroid_id
             
         print("Invalid ID, please choose an asteroid ID from the list.")
-    
-'''
-# ########################### 
-# MAIN PROGRAM
-###########################
-def main():
-    welcomeMessage()
-
-    # Continue asking for dates until valid range is entered
-    while True:
-
-        start_date, end_date = getDateRange()
-
-        if validateDateRange(start_date, end_date):
-            break
-
-        print("\nInvalid date range. Please try again.\n")
-
-    print("\nDate range accepted.")
-    print(f"Searching from {start_date} to {end_date}")
-
-
-if __name__ == "__main__":
-    main()
-'''
-#######Testing
-#welcomeMessage()
-#asteroidFeedInfo("2015-09-07", "2015-09-08")
-#printAsteroidSummary(3542519)
-#start_date, end_date = getValidDateRange()
-#getAsteroidID(valid_ids)
-
-    
