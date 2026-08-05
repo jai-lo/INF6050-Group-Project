@@ -23,6 +23,7 @@ and if it is classified as potentially hazardous.
 import requests
 from datetime import datetime
 import time
+import sys
 
 
 
@@ -34,6 +35,7 @@ import time
 #Storing API Key and URL as global variables
 API_KEY = "PMDQ9G2dHAgOeblEDAJs8cD2z4l9XyMtcMKTIjLm"
 BASE_URL = "https://api.nasa.gov/neo/rest/v1/feed"
+qvar = "quit"
 
 ########################### 
 # USER-DEFINED FUNCTIONS
@@ -63,6 +65,13 @@ def welcomeMessage():
           + "\n\thazardous.")
     timeDelay()
 
+def endTool(user_input):
+    sys.exit()
+    ''' to follow each prompted input if user wants to end game '''
+    if user_input.lower() == 'quit':
+        print ('\nThanks for trying the Asteroid Explorer! Until next time.')
+        sys.exit() 
+
 # Prompt the user to enter the start and end date in format YYYY-MM-DD
 # Return both dates as a tuple for date validation and API retrieval.
 # Validate:
@@ -82,7 +91,8 @@ def getValidDateRange():
             # Convert strings to datetime objects
             start = datetime.strptime(start_date, "%Y-%m-%d")
             end = datetime.strptime(end_date, "%Y-%m-%d")
-
+              
+            
             # Check that end date is after start date
             if end < start:
                 print("Error: The end date must be after the start date.\n")
@@ -98,6 +108,7 @@ def getValidDateRange():
 
         except ValueError:
             print("Error: Please enter dates in the format YYYY-MM-DD.\n")
+
 
 def asteroidFeedInfo(start_date: str, end_date:str, valid_ids) -> None:
     #Setup query 

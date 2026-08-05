@@ -39,10 +39,13 @@ functions.welcomeMessage()
 #Prints out new lines for legibility
 functions.newLines()
 
+
 #While loop that continues prompting the user for input until they quit
 while True:   
     #Continue asking for dates until valid range is entered
     start_date, end_date = functions.getValidDateRange()
+    
+    functions.endTool(start_date)
     
     #can this be added to the getValidDateRange function?
     print("\nDate range accepted.")
