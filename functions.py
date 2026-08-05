@@ -9,13 +9,22 @@
 @Python Version: 3.9x   
 @Required Modules: [required modules]
     
-@Description: [code description]
+@Description: This user-defined module contains the functions necessary to run
+the code in application.py.  application.py takes information from the 
+NASA Near Earth Objects API and prompts users to enter a date range to 
+output a list of objects thatwere near earth during that time. 
+From that list of objects, users can enter the ID of a specific asteroid to l
+earn more information like the diamater, the times it approaches earth, 
+and if it is classified as potentially hazardous.
 """
 ########################### 
 # IMPORT MODULES
 ###########################
 import requests
 from datetime import datetime
+import time
+
+
 
 ########################### 
 # GLOBAL VARIABLES
@@ -30,18 +39,29 @@ BASE_URL = "https://api.nasa.gov/neo/rest/v1/feed"
 # USER-DEFINED FUNCTIONS
 ###########################
 
+#Uses time function to delay the carrying out of a statement by once second 
+def timeDelay():
+    time.sleep(1)
+
+#Prints out two new lines for legibility
+def newLines():
+    print("\n\n")
+
+#Prints out message
 def welcomeMessage():
     print("\n\nWelcome to Near Earth Asteroid Explorer."
           + "\n\n\t\tType quit to exit at any time..."
-          + "\n\n\tWhen you select a date range, this application will pull"
-          + "\n\tinformation on all asteroids that were or will be"
-          + "\n\tnear earth during that time."
-          + "\n\n\tThen, using the corresponding asteroidID,"
+          + "\n\n\tWhen you select a date range between one and seven days,"
+          + "\n\tthis application will pull information "
+          + "\n\ton all asteroids that were or will be"
+          + "\n\tnear earth during that time.")
+    print("\n\n\tThen, using the corresponding asteroid ID,"
           + "\n\tyou can find more information about the asteroids"
           + "\n\twe listed, including appx. diameter,"
           + "\n\tinformation regarding the asteroids approach time,"
           + "\n\tand if the asteroid has the potential to become"
           + "\n\thazardous.")
+    timeDelay()
 
 # Prompt the user to enter the start and end date in format YYYY-MM-DD
 # Return both dates as a tuple for date validation and API retrieval.
@@ -101,6 +121,7 @@ def asteroidFeedInfo(start_date: str, end_date:str, valid_ids) -> None:
         print("-" * 50)
         
         for date in sorted(near_earth_objects.keys()):
+            timeDelay()
             print(f"\n DATE:{date}")
             print("=" * 30)
             
@@ -117,6 +138,9 @@ def asteroidFeedInfo(start_date: str, end_date:str, valid_ids) -> None:
                 valid_ids.append(asteroid_id)
                 
                 print(f"{asteroid_id:<22} {name}")
+                
+            
+            
                 
     #Error messages
     except requests.exceptions.HTTPError as http_err: 
@@ -175,28 +199,35 @@ def printAsteroidSummary(asteroidId):
     print ("-----------------------------------\n")
     
     if isPotentiallyHazardous:
+        timeDelay()
         print("This asteroid is potentially hazardous.\n")
     else:
+        timeDelay()
         print("This asteroid is not potentially hazardous.\n")       
     
+    timeDelay()
     print(f"The asteroid will approach earth {numEarthApproaches} times between {minDate} and {maxDate}\n")
     
-    
+    timeDelay()
     print("Other information about this asteroid:\n")
+    timeDelay()
     print(f"\tEstimated diameter: {diameterFeetMin} - {diameterFeetMax} feet.\n")
-    
-    print(f"\tthis asteroid was first observed on {firstObserved} and was most recently observed on {lastObserved}")
+
+    timeDelay()
+    print(f"\tThis asteroid was first observed on {firstObserved}"
+          + f"\n\tand was most recently observed on {lastObserved}")
 
 def nextAction():
 #to ask what the user wants to do after ID information results
 
     while True:
+        timeDelay()
         print("\nWhat would you like to do next?")
         print("1 - Learn about another asteroid")
         print("2 - Enter a new date range")
         print("3 - Quit")
 
-        choice = input("Choice: ").strip()
+        choice = input("\nChoice: ").strip()
 
         if choice in("1", "2", "3"):
             return choice
@@ -210,9 +241,10 @@ def validateAsteroidId(asteroid_id, valid_ids):
 
 def getAsteroidID(valid_ids):
     #asking asteroid ID input#
-
+    timeDelay()
     while True:
-        asteroid_id = input("Enter an asteroid ID for more information: ").strip()
+        asteroid_id = input(
+            "\nEnter an asteroid ID for more information: ").strip()
 
         if asteroid_id.lower() == "quit":
             return None
@@ -221,3 +253,8 @@ def getAsteroidID(valid_ids):
             return asteroid_id
             
         print("Invalid ID, please choose an asteroid ID from the list.")
+        
+    
+
+    print(f"\tthis asteroid was first observed on {firstObserved} and was most recently observed on {lastObserved}")
+
