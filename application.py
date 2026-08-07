@@ -40,7 +40,9 @@ functions.welcomeMessage()
 functions.newLines()
 
 #While loop that continues prompting the user for input until they quit
-while True:   
+while True: 
+    # Clearing IDs from last date range search
+    valid_ids.clear()
     #Continue asking for dates until valid range is entered
     start_date, end_date = functions.getValidDateRange()
     
@@ -50,6 +52,13 @@ while True:
     
     #Taking user input into function to get asteroids from the dates entered
     functions.asteroidFeedInfo(start_date, end_date, valid_ids)
+
+    # If no asteroids found, return to date selection
+    if not found_asteroids:
+        valid_ids.clear()
+        continue
+
+functions.newLines()
     functions.newLines()
     
     #Nested while loop that allows user to continue inputting and retrieving
