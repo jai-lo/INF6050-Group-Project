@@ -107,7 +107,7 @@ def getValidDateRange():
                 continue
 
             # Check NASA API maximum date range
-            if (end - start).days > 7:
+            if (end - start).days >= 7:
                 timeDelay(.5)
                 print("Error: The date range cannot exceed 7 days.\n")
                 continue
