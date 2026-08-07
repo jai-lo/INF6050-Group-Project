@@ -119,7 +119,7 @@ def getValidDateRange():
             timeDelay(.5)
             print("Error: Please enter dates in the format YYYY-MM-DD.\n")
 
-def asteroidFeedInfo(start_date: str, end_date:str, valid_ids) -> None:
+def asteroidFeedInfo(start_date: str, end_date:str, valid_ids) -> bool:
     #Setup query 
     params = {"start_date": start_date, "end_date": end_date, "api_key": API_KEY}
     
@@ -141,7 +141,13 @@ def asteroidFeedInfo(start_date: str, end_date:str, valid_ids) -> None:
         timeDelay(4)
         print(f"Total Asteroids Found: {total_asteroids}")
         print("-" * 50)
-        
+
+        # If no asteroids were found, return to date range selection
+        if total_asteroids == 0:
+            print("No asteroids were found for this date range.")
+            print("Please enter a new date range.\n")
+            return False
+
         for date in sorted(near_earth_objects.keys()):
             timeDelay(2)
             print(f"\n DATE:{date}")
@@ -160,16 +166,17 @@ def asteroidFeedInfo(start_date: str, end_date:str, valid_ids) -> None:
                 valid_ids.append(asteroid_id)
                 
                 print(f"{asteroid_id:<22} {name}")
-                
-            
-            
-                
+        return True
+                           
     #Error messages
     except requests.exceptions.HTTPError as http_err: 
         print(f"HTTP error occurred: {http_err}")
+        return False
     except Exception as err:
         print(f"An unexpected error occurred: {err}")
-        
+        return False
+
+
 
 def lookupAsteroid(asteroidId):
     #instantiate dictionary to store asteroid information
