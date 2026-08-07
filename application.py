@@ -74,7 +74,7 @@ while True:
             break
         else:
             break
-    #Exit/goodbye statement to exit progra  m
+    #Exit/goodbye statement to exit program
     if choice == "3":
         print("Thanks a lot for using the Asteroid Explorer! Goodbye!")
         break
