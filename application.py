@@ -50,15 +50,13 @@ while True:
     print("\nDate range accepted.")
     print(f"Searching from {start_date} to {end_date}")
     
-    #Taking user input into function to get asteroids from the dates entered
-    functions.asteroidFeedInfo(start_date, end_date, valid_ids)
-
+    # Retrieve asteroid data from NASA API and store whether any asteroids were found
+    found_asteroids = functions.asteroidFeedInfo(start_date, end_date, valid_ids)
+    
     # If no asteroids found, return to date selection
     if not found_asteroids:
         valid_ids.clear()
         continue
-
-functions.newLines()
     functions.newLines()
     
     #Nested while loop that allows user to continue inputting and retrieving
