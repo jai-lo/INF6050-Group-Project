@@ -69,12 +69,10 @@ while True:
         
         if choice == "1":
             continue
-        if choice == "2":
+        elif choice == "2":
             #returns date range prompt
             break
-        else:
-            break
     #Exit/goodbye statement to exit program
-    if choice == "3":
-        print("Thanks a lot for using the Asteroid Explorer! Goodbye!")
-        break
+        elif choice == "3":
+            print("Thanks a lot for using the Asteroid Explorer! Goodbye!")
+            break
