@@ -12,9 +12,9 @@
 @Description: This user-defined module contains the functions necessary to run
 the code in application.py.  application.py takes information from the 
 NASA Near Earth Objects API and prompts users to enter a date range to 
-output a list of objects thatwere near earth during that time. 
+output a list of objects that were near earth during that time. 
 From that list of objects, users can enter the ID of a specific asteroid to l
-earn more information like the diamater, the times it approaches earth, 
+earn more information like the diameter, the times it approaches earth, 
 and if it is classified as potentially hazardous.
 """
 ########################### 
@@ -83,7 +83,7 @@ def welcomeMessage():
 #   -Ensure the dates are in the correct format,
 #   -The end date is not before the start date, and
 #   -The date range does not exceed 7 days.
-# Bool: Returns True if the date range is valid; otherwise, returns False.
+# Returns validated start and end dates as a tuple.
 
 def getValidDateRange():
 
